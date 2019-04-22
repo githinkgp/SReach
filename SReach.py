@@ -23,15 +23,15 @@ P=[[0.3,0.2,0.3,0.2],[0.2,0.2,0.3,0.3],[0.2,0.2,0.3,0.3],[0.2,0.2,0.3,0.3]]
 theta=range(0,20)
 #theta=[T*math.pi/20 for T in theta]
 print np.size(V)
-for n in range(1,3):
+for n in range(1,11):
     print "step: ",n
     for q in Q:
         for t in [2]:
             for x in range(0,40):
                 for y in range(0,40):
-                    print x,y,t
-                    if dist([x,y],[20,20])<=r and n==1:
-                        V[x][y]=0
+                    #print x,y,t
+                    if dist([x,y],[20,20])<=r:
+                        V[y][x]=0
                     elif n!=1:
                         for qq in Q:
                             sumX=0
@@ -40,7 +40,7 @@ for n in range(1,3):
                                     if xx>39 or xx<0:
                                         continue
                                     for yy in range(y-10,y+10):
-                                        if yy>39 or yy<0:
+                                        if yy>39 or yy<0 or dist([xx,yy],[20,20])<=r:
                                             continue
                                         i,j=isOneReach(x,y,t*math.pi/10,xx,yy,tt*math.pi/10)
                                         if i==-1 and j==-1:
@@ -68,7 +68,15 @@ print V.shape
 #print V[:][:][1]
 #print np.size(V[:][:][10])
 #plt.contour(range(0,100),range(0,100),v,5)
+with open('outfile.txt','wb') as f:
+    for line in V:
+        count=count+1
+        np.savetxt(f,line,fmt='%.2f')
 ax.plot_surface(X,Y,V)
+
+fig=plt.figure()
+ax=plt.axes()
+plt.contour(X,Y,V,100)
 plt.show()
                       
 #x=[1,2,3]
